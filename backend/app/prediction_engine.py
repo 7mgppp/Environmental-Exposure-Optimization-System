@@ -5,11 +5,11 @@ def predict_future(df, date):
     df = df.copy()
 
     # Convert timestamp
-    df["timestamp"] = pd.to_datetime(df["timestamp"])
+    df["datetime"] = pd.to_datetime(df["datetime"])
 
     # Extract features
-    df["hour"] = df["timestamp"].dt.hour
-    df["dayofweek"] = df["timestamp"].dt.dayofweek
+    df["hour"] = df["datetime"].dt.hour
+    df["dayofweek"] = df["datetime"].dt.dayofweek
 
     # Base pollution score
     df["pollution_score"] = (

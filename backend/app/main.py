@@ -1,10 +1,9 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import func
-
 from .database import engine, SessionLocal
 from .models import Base, ExposureLog
 from .optimization_engine import optimize
+from fastapi.middleware.cors import CORSMiddleware
 
 # 1️⃣ Create app FIRST
 app = FastAPI()
@@ -28,18 +27,21 @@ def root():
     return {"message": "Backend Running"}
 
 
+# ✅ FIXED OPTIMIZE ROUTE
 @app.get("/optimize")
 def optimize_route(
     date: str,
-    user_lat: float,
-    user_lon: float,
+    station: str = "",   # optional (prevents 422)
+    user_lat: float = 0.0,
+    user_lon: float = 0.0,
     preference: float = 0.7,
     age_group: str = "adult",
-    health_condition: str = "none",
+    health_condition: str = "healthy",
     duration_hours: int = 1
 ):
     return optimize(
         date,
+        station,
         user_lat,
         user_lon,
         preference,
@@ -89,6 +91,8 @@ def exposure_summary(user_id: str = "anonymous_user"):
         "most_visited_station": most_station[0] if most_station else None,
         "risk_distribution": dict(risk_counts)
     }
+
+
 @app.get("/feature-importance")
 def feature_importance():
     from .optimization_engine import model
@@ -100,6 +104,8 @@ def feature_importance():
     importance = booster.get_score(importance_type="weight")
 
     return {"feature_importance": importance}
+
+
 @app.get("/pevi-trend")
 def pevi_trend():
     from .database import SessionLocal
@@ -123,13 +129,13 @@ def pevi_trend():
     trend = [{"date": r.date, "avg_pevi": float(r.avg_pevi)} for r in results]
 
     return {"trend": trend}
+
+
 @app.get("/download-report")
 def download_report():
-    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table
     from reportlab.lib.styles import getSampleStyleSheet
-    from reportlab.lib import colors
     from reportlab.lib.pagesizes import letter
-    from reportlab.platypus import Table
     from io import BytesIO
     from fastapi.responses import StreamingResponse
     from .database import SessionLocal
