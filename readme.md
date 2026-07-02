@@ -4,7 +4,7 @@
 
 <p align="center">
   <p align="center">
-  <img src="Screenshot%202026-06-27%20163501.png" width="100%" alt="HawaGuide Dashboard">
+  <img src="Dashboard_HawaGuide.png" alt="HawaGuide Dashboard" width="900"/>
 </p>
 </p>
 
