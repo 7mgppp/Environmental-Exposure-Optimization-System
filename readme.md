@@ -1,6 +1,6 @@
 # HawaGuide – Hyperlocal AQI Safety Platform
 
-> AI-powered hyperlocal air quality forecasting and personalized outdoor safety recommendations using satellite data, spatial interpolation, and machine learning.
+> AI-powered hyperlocal air quality forecasting and personalized outdoor safety recommendations using satellite data, spatial interpolation, and machine learning!
 
 <p align="center">
   <p align="center">
